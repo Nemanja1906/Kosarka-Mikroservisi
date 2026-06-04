@@ -1,12 +1,13 @@
 package rs.ac.uns.ftn.order_service.service;
 
 import rs.ac.uns.ftn.order_service.client.ProductClient;
-import rs.ac.uns.ftn.order_service.client.InventoryClient; // Dodaj ovo
+import rs.ac.uns.ftn.order_service.client.InventoryClient;
+import rs.ac.uns.ftn.order_service.config.RabbitConfig; // OVO MI TREBA DA BI VIDEO QUEUE
 import rs.ac.uns.ftn.order_service.model.Order;
 import rs.ac.uns.ftn.order_service.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.amqp.rabbit.core.RabbitTemplate; // OVO ZA RABBIT
 import org.springframework.stereotype.Service;
-import java.util.Map;
 
 @Service
 public class OrderService {
@@ -18,7 +19,10 @@ public class OrderService {
     private ProductClient productClient;
 
     @Autowired
-    private InventoryClient inventoryClient; // Injektuj novi client
+    private InventoryClient inventoryClient;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate; // DODATO
 
     public Order createOrder(Order order) {
         // 1. Provera stanja preko novog Inventory servisa
@@ -27,7 +31,12 @@ public class OrderService {
         // 2. Logika provere
         if (availableQuantity != null && availableQuantity >= order.getQuantity()) {
             order.setStatus("CONFIRMED");
-            return orderRepository.save(order);
+            Order savedOrder = orderRepository.save(order);
+
+            // DODATO: Slanje poruke kad je potvrdjeno
+            rabbitTemplate.convertAndSend(RabbitConfig.QUEUE, "Nova porudžbina je potvrdjena: " + savedOrder.getId());
+
+            return savedOrder;
         } else {
             order.setStatus("REJECTED");
             return order;
