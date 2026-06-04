@@ -46,4 +46,16 @@ public class OrderService {
     public java.util.List<Order> findAll() {
         return orderRepository.findAll();
     }
+
+    public Order updateOrder(Long id, Order orderDetails) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Porudžbina nije pronađena: " + id));
+
+        order.setStatus(orderDetails.getStatus());
+        return orderRepository.save(order);
+    }
+
+    public void deleteOrder(Long id) {
+        orderRepository.deleteById(id);
+    }
 }

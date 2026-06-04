@@ -1,7 +1,7 @@
 package rs.ac.uns.ftn.product_service.controller;
 
 import rs.ac.uns.ftn.product_service.model.Product;
-import rs.ac.uns.ftn.product_service.repository.ProductRepository;
+import rs.ac.uns.ftn.product_service.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,21 +12,45 @@ import java.util.List;
 public class ProductController {
 
     @Autowired
-    private ProductRepository productRepository;
+    private ProductService productService;
 
-    // Dodaj novi proizvod (POST)
+    // POST: Dodaj novi proizvod
     @PostMapping
     public Product addProduct(@RequestBody Product product) {
-        return productRepository.save(product);
+        return productService.save(product);
     }
 
-    // Izlistaj sve proizvode (GET)
+    // GET: Izlistaj sve proizvode
     @GetMapping
     public List<Product> getAllProducts() {
-        return productRepository.findAll();
+        return productService.findAll();
     }
+
+    // GET: Pronađi proizvod po ID-ju
     @GetMapping("/{id}")
     public Product getProductById(@PathVariable Long id) {
-        return productRepository.findById(id).orElse(null);
+        return productService.findById(id);
+    }
+
+    // PUT: Izmena proizvoda
+    @PutMapping("/{id}")
+    public Product updateProduct(@PathVariable Long id, @RequestBody Product productDetails) {
+        Product product = productService.findById(id);
+        if (product == null) {
+            throw new RuntimeException("Proizvod nije pronađen sa id: " + id);
+        }
+
+        product.setName(productDetails.getName());
+        product.setBrand(productDetails.getBrand());
+        product.setPrice(productDetails.getPrice());
+        product.setQuantity(productDetails.getQuantity());
+
+        return productService.save(product);
+    }
+
+    // DELETE: Brisanje proizvoda
+    @DeleteMapping("/{id}")
+    public void deleteProduct(@PathVariable Long id) {
+        productService.deleteById(id);
     }
 }
