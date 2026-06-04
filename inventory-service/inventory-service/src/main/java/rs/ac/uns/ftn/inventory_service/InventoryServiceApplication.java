@@ -1,15 +1,15 @@
-package rs.ac.uns.ftn.order_service;
+package rs.ac.uns.ftn.inventory_service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableFeignClients // OVO DODAJEMO!
-public class OrderServiceApplication {
+public class InventoryServiceApplication {
+
 	public static void main(String[] args) {
-		SpringApplication.run(OrderServiceApplication.class, args);
+		SpringApplication.run(InventoryServiceApplication.class, args);
 	}
+
 }
