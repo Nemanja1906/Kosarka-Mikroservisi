@@ -22,13 +22,29 @@ Testovi se pokreću komandom:
 ```bash
 mvn test
 
-Kako pokrenuti projekat
-Osiguraj da su Docker i PostgreSQL pokrenuti.
+## Kako pokrenuti projekat
+1. Osiguraj da su Docker i PostgreSQL pokrenuti.
+2. Pokreni Eureka Discovery server.
+3. Pokreni servise redom: product-service, inventory-service, order-service.
 
-Pokreni Eureka Discovery server.
+## Dijagram mikroservisnog sistema
+```mermaid
+graph TD
+    User((Korisnik)) --> Gateway[API Gateway]
+    Gateway --> Eureka[Eureka Server]
+    Gateway --> Order[Order Service]
+    Gateway --> Product[Product Service]
+    Order --> Inventory[Inventory Service]
+    Order --> Rabbit[RabbitMQ]
+    Order --> DB[(PostgreSQL)]
+```
 
-Pokreni servise redom: product-service, inventory-service, order-service.
+## CI/CD Pipeline
+Projekat podržava automatizovanu proveru kroz GitHub Actions. Na svaki `push` na `main` granu, pokreće se:
+1. **Build**: Kompilacija celog sistema.
+2. **Test**: Automatsko izvršavanje svih unit i integracionih testova.
 
-Autor
-Nemanja Blagojević 
+## Autor
+Nemanja Blagojević (Blagoje)
 Fakultet tehničkih nauka, Novi Sad
+
