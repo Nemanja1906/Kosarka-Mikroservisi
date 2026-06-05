@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   rabbitmq:
     image: rabbitmq:3-management
@@ -16,22 +14,30 @@ services:
       - "5432:5432"
 
   eureka-server:
-    build: ./eureka-server
+    build:
+      context: ./eureka-server/eureka-server
+      dockerfile: Dockerfile
     ports:
       - "8761:8761"
 
   product-service:
-    build: ./product-service/product-service
+    build:
+      context: ./product-service/product-service
+      dockerfile: Dockerfile
     depends_on:
       - eureka-server
 
   inventory-service:
-    build: ./inventory-service/inventory-service
+    build:
+      context: ./inventory-service/inventory-service
+      dockerfile: Dockerfile
     depends_on:
       - eureka-server
 
   order-service:
-    build: ./order-service/order-service
+    build:
+      context: ./order-service/order-service
+      dockerfile: Dockerfile
     depends_on:
       - eureka-server
       - rabbitmq

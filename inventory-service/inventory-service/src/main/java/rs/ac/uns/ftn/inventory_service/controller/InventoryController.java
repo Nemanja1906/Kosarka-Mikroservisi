@@ -18,15 +18,15 @@ public class InventoryController {
         return inventoryService.save(inventory);
     }
 
-    // GET: Provera stanja
+    // GET: Provera stanja - ISPRAVLJENO sa eksplicitnim nazivom putanje
     @GetMapping("/{productId}")
-    public Integer getQuantity(@PathVariable Long productId) {
+    public Integer getQuantity(@PathVariable("productId") Long productId) {
         return inventoryService.getQuantity(productId);
     }
 
     // PUT: Ažuriranje količine
     @PutMapping("/{productId}/{quantity}")
-    public void updateQuantity(@PathVariable Long productId, @PathVariable Integer quantity) {
+    public void updateQuantity(@PathVariable("productId") Long productId, @PathVariable("quantity") Integer quantity) {
         inventoryService.updateQuantity(productId, quantity);
     }
 }
