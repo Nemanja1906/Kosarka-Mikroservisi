@@ -48,3 +48,4 @@ Projekat podržava automatizovanu proveru kroz GitHub Actions. Na svaki `push` n
 Nemanja Blagojević (Blagoje)
 Fakultet tehničkih nauka, Novi Sad
 
+Projekat je dizajniran prema principima mikroservisne arhitekture sa jasnim razdvajanjem nadležnosti. Kontejnerizacija je izvedena preko Docker-a, dok je automatizacija procesa podržana kroz CI/CD spremnu strukturu repozitorijuma.
